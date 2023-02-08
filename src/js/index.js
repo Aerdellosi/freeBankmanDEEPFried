@@ -25,12 +25,18 @@ function getCoin1() {
   const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=5&CMC_PRO_API_KEY=${process.env.API_KEY}`;
   console.log("hello2");
   request.addEventListener("loadend", function() {
-    const receivedCoin = JSON.parse(this.responseText);
-    let name = receivedCoin.data[0].name;
-    
+    const receivedCoinArray = JSON.parse(this.responseText);
+    let name = receivedCoinArray.data;
+    let i = 0;
     console.log(name);
     if (this.status === 200) {
-      console.log("hello1");
+      name.forEach(element => {
+        console.log("spin");
+        i++;
+        let x = document.getElementById(`${i}`);
+        x.setAttribute("value", `${element.id}`);
+        x.innerText = `${element.name}`
+      });
     }
   });
   request.open("GET", url, true);
@@ -39,6 +45,23 @@ function getCoin1() {
 
 getCoin1();
 
+document.getElementById("coins").addEventListener("change", function(){
+  let coinValue = document.getElementById("coins");
+  let coinID = (coinValue[coinValue.selectedIndex].value);
+  let request = new XMLHttpRequest();
+  const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?id=${coinID}&CMC_PRO_API_KEY=${process.env.API_KEY}`;
+  console.log(url);
+  request.addEventListener("loadend", function() {
+    const selectedCoin = JSON.parse(this.responseText);
+    let coinPrice = selectedCoin.data[coinID].quote.USD.price;
+    if (this.status === 200) {
+      console.log(coinPrice);
+    }
+
+  });
+  request.open("GET", url, true);
+  request.send();
+});
 
 
 
