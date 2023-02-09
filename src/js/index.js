@@ -46,11 +46,17 @@ function getCoin1() {
 getCoin1();
 
 document.getElementById("coins").addEventListener("change", function () {
+  setInterval(() => {
+    afterChangePrice();
+  }, 10000);
+});
+
+function afterChangePrice() {
   let coinValue = document.getElementById("coins");
   let coinID = (coinValue[coinValue.selectedIndex].value);
   let request = new XMLHttpRequest();
   const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?id=${coinID}&CMC_PRO_API_KEY=${process.env.API_KEY}`;
-  console.log(url);
+  console.log("hi")
   request.addEventListener("loadend", function () {
     const selectedCoin = JSON.parse(this.responseText);
     let coinPrice = selectedCoin.data[coinID].quote.USD.price;
@@ -58,28 +64,12 @@ document.getElementById("coins").addEventListener("change", function () {
       document.getElementById("toFill").innerText = coinPrice;
       let x = document.getElementById("coins");
       x.setAttribute("disabled", "");
-      setInterval(() => {
-        console.log("hi")
-        request.addEventListener("loadend", function () {
-          const selectedCoin = JSON.parse(this.responseText);
-          let coinPrice = selectedCoin.data[coinID].quote.USD.price;
-          if (this.status === 200) {
-            document.getElementById("toFill").innerText = coinPrice;
-          }
-        });
-
-        request.open("GET", url, true);
-        request.send();
-
-      }, 10000);
     }
-
   });
 
   request.open("GET", url, true);
   request.send();
-});
-
+}
 
 
 // // UI Logic
