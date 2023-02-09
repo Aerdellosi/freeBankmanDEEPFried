@@ -68,19 +68,10 @@ document.getElementById("coins").addEventListener("change", function () {
           }
         });
 
-
-
-
-
-
-
-
-
-
         request.open("GET", url, true);
         request.send();
 
-      }, 61000);
+      }, 10000);
     }
 
   });
