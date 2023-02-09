@@ -45,3 +45,9 @@
 
 ## License
 MIT
+
+two players log in to a new instance. Instance creates a temp wallet. submits an equal amount of USD, then they select which
+coins they'd like. Wallet accesses an exchange, purchases and stores the correct amount of each into the wallet.
+bet begins. countdown goes. whoever wins the bet gets access to the wallet's key and can transfer both coins out into his
+own wallet.
+

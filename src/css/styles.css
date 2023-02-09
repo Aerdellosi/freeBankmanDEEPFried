@@ -1,3 +1,15 @@
 .hidden {
   display: none;
 }
+
+.player1Div {
+  background-color: lightcoral;
+}
+
+.player2Div {
+  background-color: lightgreen;
+}
+
+.underPlayerDiv {
+  background-color: aliceblue;
+}
