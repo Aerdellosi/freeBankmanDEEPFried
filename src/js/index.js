@@ -6,14 +6,22 @@ window.addEventListener("load", () => {
 
   let coinPrice1;
   let coinPrice2;
-  let button = document.getElementById("initializeGame")
+  let button = document.getElementById("initializeGame");
   let timeCounter = 0;
+  let minutes = document.getElementById("selectLengthBet");
+  document.getElementById("coins1").setAttribute("disabled", "");
+  document.getElementById("coins2").setAttribute("disabled", "");
+  let startBetCounter = 0;
+
+
 
   button.onclick = function () {
+    document.getElementById("selectLengthBet").setAttribute("disabled", "");
+    let setBetTime = parseInt(minutes[minutes.selectedIndex].value);
     coinPrice1 = parseFloat(document.getElementById("toFill1").innerText)
     coinPrice2 = parseFloat(document.getElementById("toFill2").innerText)
-    button.setAttribute("class", "hidden")
-    let minuteCounter = 5;
+    button.setAttribute("class", "hidden");
+    let minuteCounter = setBetTime;
     let secondsCounter = 0;
     let timerMinute = document.getElementById("timerMinute");
     let timerSecond = document.getElementById("timerSecond");
@@ -32,18 +40,18 @@ window.addEventListener("load", () => {
         console.log(coinPricePercent1 + "COINPR1");
         console.log(coinPricePercent2 + "COINPR2");
         if (coinPricePercent1 > coinPricePercent2) {
-          winner.innerText = "Player 1 Wins!!"
+          winner.innerText = "Player 1 Wins!!";
         } else if (coinPricePercent1 < coinPricePercent2) {
-          winner.innerText = "Player 2 Wins!!"
+          winner.innerText = "Player 2 Wins!!";
         } else {
-          winner.innerText = "You both suck!!"
+          winner.innerText = "You both suck!!";
         }
         clearInterval(betInterval);
       }
       if (secondsCounter === 0 && counter === 0) {
-        secondsCounter = 59
+        secondsCounter = 59;
         minuteCounter -= 1;
-        console.log("hello")
+        console.log("hello");
 
       }
       if (counter === 0) {
@@ -87,7 +95,7 @@ window.addEventListener("load", () => {
           i++;
           let x = document.getElementById(`${i}`);
           x.setAttribute("value", `${element.id}`);
-          x.innerText = `${element.name}`
+          x.innerText = `${element.name}`;
         });
       }
     });
@@ -99,31 +107,41 @@ window.addEventListener("load", () => {
   getCoin1(5);
 
   document.getElementById("coins1").addEventListener("change", function () {
-  afterChangePrice("coins1", "toFill1");
-  let priceUpdateInterval1 =setInterval(() => {
+    startBetCounter++;
+    if (startBetCounter === 2) {
+      document.getElementById("initializeGame").removeAttribute("disabled");
+    }
+    afterChangePrice("coins1", "toFill1");
+    let priceUpdateInterval1 = setInterval(() => {
       afterChangePrice("coins1", "toFill1");
-      timeCounter += 5;
-      if (timeCounter >= 300) {
+      let minutesTime = parseInt(minutes[minutes.selectedIndex].value);
+      timeCounter += 1;
+      if (timeCounter === minutesTime) {
         clearInterval(priceUpdateInterval1);
       }
-    }, 10000);
+    }, 60000);
 
   });
 
   document.getElementById("coins2").addEventListener("change", function () {
+    startBetCounter++;
+    if (startBetCounter === 2) {
+      document.getElementById("initializeGame").removeAttribute("disabled");
+    }
     afterChangePrice("coins2", "toFill2");
     let priceUpdateInterval2 = setInterval(() => {
       afterChangePrice("coins2", "toFill2");
-      if (timeCounter >= 300) {
+      let minutesTime = parseInt(minutes[minutes.selectedIndex].value);
+      if (timeCounter === minutesTime) {
         clearInterval(priceUpdateInterval2);
       }
-      timeCounter += 5;
-    }, 10000);
+      timeCounter += 1;
+    }, 60000);
 
   });
 
   function afterChangePrice(coins, text) {
-    let coinValue = document.getElementById(coins)
+    let coinValue = document.getElementById(coins);
     let coinID = (coinValue[coinValue.selectedIndex].value);
     let request = new XMLHttpRequest();
     const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?id=${coinID}&CMC_PRO_API_KEY=${process.env.API_KEY}`;
@@ -141,7 +159,11 @@ window.addEventListener("load", () => {
     request.send();
   }
 
-
+  document.getElementById("selectLengthBet").addEventListener("change", () => {
+    document.getElementById("coins1").removeAttribute("disabled", "");
+    document.getElementById("coins2").removeAttribute("disabled", "");
+    document.getElementById("selectLengthBet").setAttribute("disabled", "");
+  });
 
 
   /////PLAYER TWO
